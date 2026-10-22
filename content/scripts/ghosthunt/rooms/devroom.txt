@@ -1,0 +1,17 @@
+// Rooms of the generated devroom (ose_viewer --dev --map devroom --exec "ghosthunt 1").
+// A rooms file for a map replaces the rooms the game would take from the map's nav places
+// or guess from its soundscapes. box: min x y z, max x y z (world units); a room may have
+// several boxes. "gh_rooms_save current" writes the rooms in use in this format.
+"Rooms"
+{
+	"room"
+	{
+		"name" "West"
+		"box" "-512 -512 -16 0 512 256"
+	}
+	"room"
+	{
+		"name" "East"
+		"box" "0 -512 -16 512 512 256"
+	}
+}
