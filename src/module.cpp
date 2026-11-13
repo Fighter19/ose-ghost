@@ -7,6 +7,7 @@
 #include "core/cvar.h"
 #include "core/log.h"
 #include "game/inspect.h"
+#include "game/launch.h"
 #include "game/teams.h"
 #include "ghosthunt.h"
 
@@ -189,7 +190,25 @@ void registerGhostHunt() {
     game::addWorldHooks({startHunt, endHunt});
 }
 
-const bool kRegistered = (game::addGameModule(&registerGhostHunt), game::addGameContent(OSE_GHOSTHUNT_CONTENT), true);
+// The launcher menu's entry: CS:S's maps with a ghost. Maps with houses and many rooms first.
+game::LaunchMode launchMode() {
+    game::LaunchMode m;
+    m.name = "Ghost hunt";
+    m.description = "Find the room a ghost haunts with the EMF reader. Investigators carry no weapons.";
+    m.games = {"cstrike"};
+    m.exec = "ghosthunt 1";
+    m.maps = {"cs_office", "cs_militia", "cs_italy", "cs_havana", "de_chateau"};
+    m.settings = {
+        {"gh_ghost_visible", "Ghost always visible", {}, {}},
+        {"gh_ghost_speed", "Ghost speed", {{"50", "Slow"}, {"70", "Normal"}, {"110", "Fast"}}, "70"},
+        {"gh_ghost_emf5", "EMF 5 evidence", {{"-1", "Random"}, {"1", "Yes"}, {"0", "No"}}, "-1"},
+        {"gh_rooms_source", "Rooms from", {{"auto", "Automatic"}, {"nav", "Nav places"}, {"soundscape", "Soundscapes"}}, "auto"},
+    };
+    return m;
+}
+
+const bool kRegistered = (game::addGameModule(&registerGhostHunt), game::addGameContent(OSE_GHOSTHUNT_CONTENT),
+                          game::addLaunchMode(launchMode()), true);
 
 }  // namespace
 
